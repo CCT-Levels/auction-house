@@ -1,6 +1,7 @@
 import 'server-only';
+import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers'
+
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
@@ -31,7 +32,7 @@ export async function createSession(userID) {
 
     cookieStore.set('session', session, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         expires: expiresAt,
         sameSite: 'lax',
         path: '/',
