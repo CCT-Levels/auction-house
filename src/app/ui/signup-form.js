@@ -8,7 +8,7 @@ export function SignupForm() {
   const [state, action, pending] = useActionState(signup, undefined)
  
   return (
-    <div className='md:container md:mx-auto md:h-screen md:flex md:justify-center md:items-center'>
+    <div className='md:container md:mx-auto md:pt-5 md:flex md:justify-center md:items-center'>
     <form className='grid' action={action}>
       <div className='pt-3 flex flex-col'>
         <label htmlFor="firstName" className='inline-block'>First Name</label>

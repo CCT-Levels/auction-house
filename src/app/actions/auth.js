@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 const bcrypt = require('bcrypt')
 const db = require('@/app/lib/db')
 
+let newUserID
+
 export async function signup(state, formData) {
     // validate forms
     const validatedFields = SignupFormSchema.safeParse({
@@ -34,7 +36,11 @@ export async function signup(state, formData) {
 
       const result = await db.pool.query(insertQuery, [firstName, lastName, email, phone, dob, address, postcode, hashedPassword])
 
-      await createSession(result.userID)
+      let userID = await result.insertId
+
+      newUserID = userID.toString().replace("n", "")
+
+      await createSession(newUserID)
 
     } catch (err) {
       console.log(err)
