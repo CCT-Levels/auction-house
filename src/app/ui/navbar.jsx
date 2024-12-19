@@ -1,6 +1,6 @@
-'use client'
+// 'use client'
 
-import React, { useActionState } from 'react';
+import React from 'react';
 import { AiOutlineUser, AiOutlinePlus, AiOutlineMenu, AiOutlineSearch} from 'react-icons/ai'
 import Logo from '@/app/assets/buzzbids.png'
 import Image from 'next/image';

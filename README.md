@@ -40,6 +40,12 @@ CREATE UNIQUE INDEX buzzbids_userID ON buzzbids.users (userID);
 CREATE UNIQUE INDEX buzzbids_phoneNumber ON buzzbids.users (phoneNumber);
 CREATE UNIQUE INDEX buzzbids_emailAddress ON buzzbids.users (emailAddress);
 
+CREATE TABLE IF NOT EXISTS buzzbids.sessions (
+  sessionID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  userID int DEFAULT NULL,
+  expiresAt Date DEFAULT NULL
+);
+
 CREATE TABLE IF NOT EXISTS buzzbids.auctions (
   auctionID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   itemName varchar(500) DEFAULT NULL,
@@ -85,6 +91,7 @@ ALTER TABLE buzzbids.bids ADD CONSTRAINT bids_ibfk_1 FOREIGN KEY (userID) REFERE
 ALTER TABLE buzzbids.bids ADD CONSTRAINT bids_ibfk_2 FOREIGN KEY (auctionID) REFERENCES buzzbids.auctions (auctionID);
 ALTER TABLE buzzbids.reviews ADD CONSTRAINT reviews_ibfk_1 FOREIGN KEY (userID) REFERENCES buzzbids.users (userID);
 ALTER TABLE buzzbids.reviews ADD CONSTRAINT reviews_ibfk_2 FOREIGN KEY (reviewerID) REFERENCES buzzbids.users (userID);
+ALTER TABLE buzzbids.sessions ADD CONSTRAINT sessions_ibfk_1 FOREIGN KEY (userID) REFERENCES buzzbids.users (userID);
 ```
 
 ## Eventually, the website will be deployed on the server which already has the database :p
