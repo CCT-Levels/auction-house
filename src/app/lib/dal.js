@@ -1,4 +1,4 @@
-'use server'
+import 'server-only'
 
 import { cookies } from 'next/headers'
 import { decrypt } from './session'
@@ -9,7 +9,9 @@ export const verifySession = cache(async () => {
     const cookie = (await cookies()).get('session')?.value
     const session = await decrypt(cookie)
 
-if (session === undefined) {
-    redirect('/login')
+    if (session === undefined) {
+        return
     }
+
+    return session.newSessionID
 })

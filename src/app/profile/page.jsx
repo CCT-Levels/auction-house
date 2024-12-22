@@ -1,11 +1,17 @@
+import { redirect } from "next/navigation"
 import { verifySession } from "../lib/dal"
+import NavbarProfile from "../ui/navbar/navbarProfile"
 
-export default function Profile() {
-    verifySession()
+export default async function Profile() {
+    const loggedIn = await verifySession()
+
+    if (!loggedIn) {
+        await redirect('/login')
+    }
     
     return (
-        <div className="container mx-auto">
-            <h1>This is profile</h1>
-        </div>
+        <>
+            <NavbarProfile />
+        </>
     )
 }

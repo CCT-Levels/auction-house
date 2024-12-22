@@ -1,6 +1,6 @@
 'use server'
-import { createSession } from "@/app/lib/session";
-import { SignupFormSchema } from "@/app/lib/definitions";
+import { createSession, deleteSession } from "@/app/lib/session";
+import { SignupFormSchema, LoginFormSchema } from "@/app/lib/definitions";
 import { redirect } from "next/navigation";
 const bcrypt = require('bcrypt')
 const db = require('@/app/lib/db')
@@ -47,4 +47,49 @@ export async function signup(state, formData) {
     } finally {
       redirect('/profile')
     }
-} 
+}
+
+export async function login(state, formData) {
+  const validatedFields = LoginFormSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password')
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  const { email, password } = validatedFields.data
+
+  try {
+    const userQuery = "SELECT password FROM users WHERE emailAddress = ?";
+
+    const result = await db.pool.query(userQuery, [email])
+
+    const user = result[0]
+
+    if (!user) {
+      return {
+        errors: {
+          email: 'User not found'
+        }
+      }
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password)
+
+    if (!validPassword) {
+      return {
+        errors: {
+          password: 'Invalid password'
+        }
+      }
+    }
+
+    await createSession(user.id)
+  } catch (err) {
+    console.log(err)
+  }
+}

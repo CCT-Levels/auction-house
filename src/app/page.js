@@ -1,14 +1,13 @@
-import Navbar from "./ui/navbar";
 import Auction from "@/app/assets/auctioneer.jpg"
 import Image from "next/image";
 import Auction2 from "@/app/assets/auctioneer2.png"
 import Auction3 from "@/app/assets/auctioneer3.png"
+import NavbarMain from "./ui/navbar/navbarMain";
 
 export default function Home() {
   return (
     <>
-    <Navbar />
-
+    <NavbarMain />
     <div className="pt-6 container mx-auto justify-center flex">
       <Image
         src={Auction}

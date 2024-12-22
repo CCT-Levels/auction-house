@@ -29,20 +29,25 @@ export async function decrypt(session) {
 
 export async function createSession(userID) {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    let firstName
 
     try {
       const insertQuery = "INSERT INTO sessions (userID, expiresAt) VALUES (?,?)";
+      const findQuery = "SELECT firstName from users WHERE userID = ?"
     
       const result = await db.pool.query(insertQuery, [userID, expiresAt])
+      const findResult = await db.pool.query(findQuery, [userID])
     
       sessionID = await result.insertId;
+
+      firstName = findResult[0].firstName;
 
       newSessionID = sessionID.toString().replace("n", "");
     
     } catch (err) {
       console.log(err)
     }
-    const session = await encrypt({ newSessionID, expiresAt });
+    const session = await encrypt({ newSessionID, firstName, expiresAt });
     const cookieStore = await cookies()
 
     cookieStore.set('session', session, {

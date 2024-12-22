@@ -1,11 +1,20 @@
-import { SignupForm } from "../ui/signup-form";
-import Navbar from "../ui/navbar"
+import { redirect } from "next/navigation"
+import { verifySession } from "../lib/dal"
+import { LoginForm } from "../ui/login-form"
+import NavbarMain from "../ui/navbar/navbarMain"
 
-export default function Login() {
+export default async function Login() {
+
+    const sessionID = await verifySession()
+
+    if (sessionID) {
+        redirect('/profile')
+    }
+
     return (
-        <div className="">
-        <Navbar />
-        <SignupForm />
-        </div>
+        <>
+        <NavbarMain />
+        <LoginForm />
+        </>
     )
 }
