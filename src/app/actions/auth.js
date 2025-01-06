@@ -41,7 +41,7 @@ export async function signup(state, formData) {
       newUserID = userID.toString().replace("n", "")
 
       await createSession(newUserID)
-
+      db.pool.end()
     } catch (err) {
       console.log(err)
     } finally {
@@ -64,7 +64,7 @@ export async function login(state, formData) {
   const { email, password } = validatedFields.data
 
   try {
-    const userQuery = "SELECT password FROM users WHERE emailAddress = ?";
+    const userQuery = "SELECT password, userID FROM users WHERE emailAddress = ?";
 
     const result = await db.pool.query(userQuery, [email])
 
@@ -88,7 +88,7 @@ export async function login(state, formData) {
       }
     }
 
-    await createSession(user.id)
+    await createSession(user.userID)
   } catch (err) {
     console.log(err)
   }
