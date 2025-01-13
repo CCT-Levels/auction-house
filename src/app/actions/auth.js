@@ -41,7 +41,6 @@ export async function signup(state, formData) {
       newUserID = userID.toString().replace("n", "")
 
       await createSession(newUserID)
-      db.pool.end()
     } catch (err) {
       console.log(err)
     } finally {

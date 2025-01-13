@@ -45,8 +45,6 @@ export async function createSession(userID) {
       firstNameV = findResult[0].firstName;
 
       newSessionID = sessionID.toString().replace("n", "");
-
-      db.pool.end()
     } catch (err) {
       console.log(err)
     }
