@@ -3,15 +3,16 @@ import { verifySession } from "../lib/dal"
 import NavbarProfile from "../ui/navbar/navbarProfile"
 
 export default async function Profile() {
-    const loggedIn = await verifySession()
+    
+    const session = await verifySession()
 
-    if (!loggedIn) {
-        await redirect('/login')
+    if (session === undefined) {
+        redirect('/login')
     }
     
     return (
         <>
-            <NavbarProfile />
+            <NavbarProfile name={session.firstNameV} />
         </>
     )
 }

@@ -41,3 +41,7 @@ export const LoginFormSchema = z.object({
     // })
     .trim()
 })
+
+export const EmailCheck = z.object({
+  email: z.string().email({ message: 'Invalid Email' }).trim()
+})

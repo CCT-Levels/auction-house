@@ -11,7 +11,8 @@ module.exports = {
           foreground: "var(--foreground)",
           grey: "#22333b",
           hoverGrey: '#2D434E',
-          yellow: "#fbc720"
+          yellow: "#fbc720",
+          shadedGrey: "#D4D4ED"
         },
       },
     },

@@ -31,10 +31,12 @@ export async function signup(state, formData) {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
+    let conn
     try {
+      conn = await db.pool.getConnection()
       const insertQuery = "INSERT INTO users (firstName, lastName, emailAddress, phoneNumber, dateOfBirth, houseAddress, postcode, password) VALUES (?,?,?,?,?,?,?,?)";
 
-      const result = await db.pool.query(insertQuery, [firstName, lastName, email, phone, dob, address, postcode, hashedPassword])
+      const result = await conn.query(insertQuery, [firstName, lastName, email, phone, dob, address, postcode, hashedPassword])
 
       let userID = await result.insertId
 
@@ -44,6 +46,7 @@ export async function signup(state, formData) {
     } catch (err) {
       console.log(err)
     } finally {
+      conn.release()
       redirect('/profile')
     }
 }
@@ -61,11 +64,12 @@ export async function login(state, formData) {
   }
 
   const { email, password } = validatedFields.data
-
+  let conn;
   try {
+    conn = await db.pool.getConnection()
     const userQuery = "SELECT password, userID FROM users WHERE emailAddress = ?";
 
-    const result = await db.pool.query(userQuery, [email])
+    const result = await conn.query(userQuery, [email])
 
     const user = result[0]
 
@@ -90,5 +94,7 @@ export async function login(state, formData) {
     await createSession(user.userID)
   } catch (err) {
     console.log(err)
+  } finally {
+    conn.release()
   }
 }

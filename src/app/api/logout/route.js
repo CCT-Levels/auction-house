@@ -9,14 +9,17 @@ export async function GET(req) {
     const session = await decrypt(cookieStore.get('session')?.value)
     const sessionID = session.newSessionID
 
+    let conn;
     try {
+        conn = await db.pool.getConnection()
         const deleteQuery = "DELETE FROM sessions WHERE sessionID = ?";
             
-        await db.pool.query(deleteQuery, [sessionID])
+        await conn.query(deleteQuery, [sessionID])
         
     } catch (err) {
         console.log(err)
     } finally {
+        conn.release()
         cookieStore.delete('session')
         redirect('/')
     }
